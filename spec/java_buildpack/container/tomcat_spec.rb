@@ -24,7 +24,7 @@ module JavaBuildpack::Container
 
     TOMCAT_DETAILS = [TOMCAT_VERSION, 'test-tomcat-uri']
 
-    SUPPORT_VERSION = JavaBuildpack::Util::TokenizedVersion.new('1.0.+')
+    SUPPORT_VERSION = JavaBuildpack::Util::TokenizedVersion.new('1.0.0')
 
     SUPPORT_DETAILS = [SUPPORT_VERSION, 'test-support-uri']
 
@@ -89,7 +89,7 @@ module JavaBuildpack::Container
         server = File.join conf_dir, 'server.xml'
         expect(File.exists?(server)).to be_true
 
-        support = File.join tomcat_dir, 'lib', 'tomcat-buildpack-support.jar'
+        support = File.join tomcat_dir, 'lib', 'tomcat-buildpack-support-1.0.0.jar'
         expect(File.exists?(support)).to be_true
       end
     end

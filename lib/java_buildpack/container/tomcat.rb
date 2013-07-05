@@ -106,7 +106,7 @@ module JavaBuildpack::Container
       print "-----> Downloading Buildpack Tomcat Support #{@support_version} from #{@support_uri} "
 
       JavaBuildpack::Util::ApplicationCache.new.get(@support_uri) do |file|  # TODO Use global cache #50175265
-        system "cp #{file.path} #{File.join tomcat_home, 'lib', 'tomcat-buildpack-support.jar'}"
+        system "cp #{file.path} #{File.join(tomcat_home, 'lib', support_jar_name(@support_version))}"
         puts "(#{(Time.now - download_start_time).duration})"
       end
     end
@@ -170,6 +170,10 @@ module JavaBuildpack::Container
 
     def root
       File.join webapps, 'ROOT'
+    end
+
+    def support_jar_name(version)
+      "tomcat-buildpack-support-#{version}.jar"
     end
 
     def tomcat_home

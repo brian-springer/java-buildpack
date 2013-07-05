@@ -63,7 +63,7 @@ module JavaBuildpack::Framework
           :lib_directory => lib_directory,
           :configuration => {}).compile
 
-        expect(File.exists? File.join(lib_directory, 'spring-auto-reconfiguration.jar')).to be_true
+        expect(File.exists? File.join(lib_directory, 'spring-auto-reconfiguration-0.6.8.jar')).to be_true
       end
     end
 

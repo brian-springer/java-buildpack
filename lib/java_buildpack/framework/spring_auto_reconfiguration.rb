@@ -49,13 +49,8 @@ module JavaBuildpack::Framework
     #
     # @return [void]
     def compile
-      download_start_time = Time.now
-      print "-----> Downloading Spring Auto Reconfiguration #{@auto_reconfiguration_version} from #{@auto_reconfiguration_uri} "
-
-      JavaBuildpack::Util::ApplicationCache.new.get(@auto_reconfiguration_uri) do |file|  # TODO Use global cache #50175265
-        system "cp #{file.path} #{File.join @lib_directory, 'spring-auto-reconfiguration.jar'}"
-        puts "(#{(Time.now - download_start_time).duration})"
-      end
+      download_auto_reconfiguration
+      modify_web_xml
     end
 
     # Does nothing
@@ -67,6 +62,19 @@ module JavaBuildpack::Framework
     private
 
     SPRING_JAR_PATTERN = 'spring-core*.jar'
+
+    WEB_XML = File.join 'WEB-INF', 'web.xml'
+
+    def download_auto_reconfiguration
+      download_start_time = Time.now
+      print "-----> Downloading Spring Auto Reconfiguration #{@auto_reconfiguration_version} from #{@auto_reconfiguration_uri} "
+
+      JavaBuildpack::Util::ApplicationCache.new.get(@auto_reconfiguration_uri) do |file|  # TODO Use global cache #50175265
+        system "cp #{file.path} #{File.join(@lib_directory, jar_name(@auto_reconfiguration_version))}"
+        puts "(#{(Time.now - download_start_time).duration})"
+      end
+
+    end
 
     def self.find_auto_reconfiguration(app_dir, configuration)
       if spring_application? app_dir
@@ -83,6 +91,18 @@ module JavaBuildpack::Framework
 
     def id(version)
       "spring-auto-reconfiguration-#{version}"
+    end
+
+    def jar_name(version)
+      "#{id version}.jar"
+    end
+
+    def modify_web_xml
+      web_xml = File.join @app_dir, WEB_XML
+
+      if File.exists? web_xml
+
+      end
     end
 
     def self.spring_application?(app_dir)
